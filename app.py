@@ -2,29 +2,24 @@ import streamlit as st
 import pickle
 import numpy as np
 
-# Load trained model
-model = pickle.load(open("XGBR.pkl", "rb"))
+model = pickle.load(open("XGBR.pkl","rb"))
 
-st.set_page_config(page_title="XGBoost Prediction App", layout="centered")
+st.title("California House Price Prediction")
 
-st.title("🔮 XGBoost Regression Prediction App")
-st.write("Enter the feature values to get prediction")
+MedInc = st.number_input("Median Income",0.0,15.0)
+HouseAge = st.number_input("House Age",1,52)
+AveRooms = st.number_input("Average Rooms",0.0,15.0)
+AveBedrms = st.number_input("Average Bedrooms",0.0,5.0)
+Population = st.number_input("Population",0,40000)
+AveOccup = st.number_input("Average Occupancy",0.0,1250.0)
+Latitude = st.number_input("Latitude",32.5,42.0)
+Longitude = st.number_input("Longitude",-124.5,-114.0)
 
-# Input fields (8 features)
-f1 = st.number_input("MedInc")
-f2 = st.number_input("HouseAge")
-f3 = st.number_input("AveRooms")
-f4 = st.number_input("AveBedrms")
-f5 = st.number_input("Population")
-f6 = st.number_input("AveOccup")
-f7 = st.number_input("Latitude")
-f8 = st.number_input("Longitude")
-
-# Prediction button
-if st.button("Predict"):
-
-    features = np.array([[f1, f2, f3, f4, f5, f6, f7, f8]])
-
+if st.button("Predict Price"):
+    
+    features = np.array([[MedInc,HouseAge,AveRooms,AveBedrms,
+                          Population,AveOccup,Latitude,Longitude]])
+    
     prediction = model.predict(features)
 
-    st.success(f"Prediction Result: {prediction[0]}")
+    st.success(f"Predicted House Price: {prediction[0]}")
