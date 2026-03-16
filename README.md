@@ -140,15 +140,6 @@ Example features used in prediction:
 
 *(Replace with your dataset features)*
 
----
-
-# 📸 Application Screenshot
-
-Add screenshot here
-
-```
-images/app_screenshot.png
-```
 
 ---
 
@@ -170,6 +161,8 @@ pickle-mixin
 # 👨‍💻 Author
 
 **Prasanna Deshmane**
+**9834562291**
+**prasannadeshmane9834@gmail.com**
 
 🔗 GitHub  
 https://github.com/your-username
