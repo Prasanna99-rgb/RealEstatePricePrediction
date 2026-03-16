@@ -52,5 +52,3 @@ The Streamlit app allows users to:
 
 ---
 
-# 📂 Project Structure
-
