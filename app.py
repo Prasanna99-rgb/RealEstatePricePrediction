@@ -11,14 +11,14 @@ st.title("🔮 XGBoost Regression Prediction App")
 st.write("Enter the feature values to get prediction")
 
 # Input fields (8 features)
-f1 = st.number_input("Feature 1")
-f2 = st.number_input("Feature 2")
-f3 = st.number_input("Feature 3")
-f4 = st.number_input("Feature 4")
-f5 = st.number_input("Feature 5")
-f6 = st.number_input("Feature 6")
-f7 = st.number_input("Feature 7")
-f8 = st.number_input("Feature 8")
+f1 = st.number_input("MedInc")
+f2 = st.number_input("HouseAge")
+f3 = st.number_input("AveRooms")
+f4 = st.number_input("AveBedrms")
+f5 = st.number_input("Population")
+f6 = st.number_input("AveOccup")
+f7 = st.number_input("Latitude")
+f8 = st.number_input("Longitude")
 
 # Prediction button
 if st.button("Predict"):
