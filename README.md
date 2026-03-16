@@ -138,17 +138,7 @@ http://localhost:8501
 
 ---
 
-# 📸 App Screenshot
 
-(Add screenshot of your Streamlit app here)
-
-Example:
-
-```
-![App Screenshot](screenshot.png)
-```
-
----
 
 # 🎯 Future Improvements
 
