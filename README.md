@@ -170,7 +170,7 @@ pickle-mixin
 https://github.com/your-username
 
 🔗 LinkedIn  
-https://linkedin.com/in/your-linkedin
+https://www.linkedin.com/in/prasanna-deshmane-80a419205
 
 ---
 
