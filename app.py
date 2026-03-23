@@ -14,26 +14,69 @@ st.set_page_config(
 # ------------------ CUSTOM CSS ------------------
 st.markdown("""
 <style>
-.main {
-    background-color: #f5f7fa;
+
+/* Main App Background */
+.stApp {
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: white;
 }
+
+/* Card Style */
+.card {
+    padding: 25px;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    box-shadow: 0px 8px 25px rgba(0,0,0,0.5);
+    margin-bottom: 20px;
+}
+
+/* Buttons */
 .stButton>button {
-    background-color: #4CAF50;
+    background: linear-gradient(90deg, #00c6ff, #0072ff);
     color: white;
     font-size: 18px;
     border-radius: 10px;
     height: 3em;
     width: 100%;
+    border: none;
 }
 .stButton>button:hover {
-    background-color: #45a049;
+    background: linear-gradient(90deg, #0072ff, #00c6ff);
 }
-.card {
-    padding: 20px;
-    border-radius: 15px;
-    background-color: white;
-    box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+
+/* Inputs */
+.stSlider label, .stNumberInput label {
+    color: #ffffff !important;
 }
+
+/* Sidebar */
+[data-testid="stSidebar"] {
+    background-color: #111827;
+}
+
+/* Titles */
+h1, h2, h3 {
+    color: #ffffff;
+}
+
+/* Metric Cards */
+[data-testid="stMetric"] {
+    background-color: rgba(255,255,255,0.05);
+    padding: 15px;
+    border-radius: 10px;
+}
+
+/* Table */
+.stDataFrame {
+    background-color: rgba(255,255,255,0.05);
+}
+
+/* Footer */
+footer {
+    visibility: hidden;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
