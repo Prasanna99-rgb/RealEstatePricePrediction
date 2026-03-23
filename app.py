@@ -3,108 +3,99 @@ import numpy as np
 import pickle
 import pandas as pd
 
-# Page config
+# ---------------- PAGE CONFIG ----------------
 st.set_page_config(
     page_title="California Housing Price Predictor",
     page_icon="🏠",
     layout="centered"
 )
 
-# Load model with caching
+# ---------------- LOAD MODEL ----------------
 @st.cache_resource
 def load_model():
     try:
-        model = pickle.load(open("XGBR.pkl", "rb"))
+        with open("XGBR.pkl", "rb") as f:
+            model = pickle.load(f)
         return model
-    except FileNotFoundError:
-        st.error("❌ Model file not found. Please ensure 'XGBR.pkl' is in the app directory.")
+    except Exception as e:
+        st.error(f"❌ Error loading model: {e}")
         st.stop()
 
 model = load_model()
 
-# Title and description
+# ---------------- HEADER ----------------
 st.title("🏠 California Housing Price Predictor")
 st.markdown("""
-This app estimates the **median house value** for California districts based on 
-1990 census data. Simply adjust the sliders below and click **Predict**.
+Predict **median house prices** using ML (XGBoost).
+
+Adjust the features and click **Predict** to get results instantly.
 """)
 
-# Sidebar with model info
+# ---------------- SIDEBAR ----------------
 with st.sidebar:
-    st.header("ℹ️ About")
+    st.header("ℹ️ Model Info")
     st.markdown("""
-    - **Model:** XGBoost Regressor  
-    - **R² Score:** ~0.80 (on test set)  
-    - **Features:** 8 attributes from the California Housing dataset  
-    - **Target:** Median house value in **USD**  
+    - Model: **XGBoost Regressor**
+    - Dataset: California Housing
+    - Features: 8
+    - Accuracy: ~80% R²
     """)
-    st.caption("Data source: scikit-learn's California housing dataset")
+    st.divider()
+    st.info("Tip: Higher income & better location → higher prices 📈")
 
-# Create two columns for inputs
+# ---------------- INPUT UI ----------------
 col1, col2 = st.columns(2)
 
 with col1:
-    medinc = st.slider(
-        "💰 Median Income", 
-        min_value=0.0, max_value=15.0, value=3.0, step=0.1,
-        help="Median income in block group (in $10,000s)"
-    )
-    houseage = st.slider(
-        "🏚️ House Age", 
-        min_value=0.0, max_value=100.0, value=20.0, step=1.0,
-        help="Median house age in block group (years)"
-    )
-    averooms = st.slider(
-        "🛏️ Avg Rooms per Household", 
-        min_value=1.0, max_value=20.0, value=5.0, step=0.1,
-        help="Average number of rooms per dwelling"
-    )
-    avebedrms = st.slider(
-        "🛌 Avg Bedrooms per Household", 
-        min_value=0.5, max_value=10.0, value=2.0, step=0.1,
-        help="Average number of bedrooms per dwelling"
-    )
+    medinc = st.slider("💰 Median Income", 0.0, 15.0, 3.0, 0.1)
+    houseage = st.slider("🏚️ House Age", 0.0, 100.0, 20.0, 1.0)
+    averooms = st.slider("🛏️ Avg Rooms", 1.0, 20.0, 5.0, 0.1)
+    avebedrms = st.slider("🛌 Avg Bedrooms", 0.5, 10.0, 2.0, 0.1)
 
 with col2:
-    population = st.number_input(
-        "👥 Population", 
-        min_value=0, max_value=50000, value=1000, step=100,
-        help="Total population in block group"
-    )
-    aveoccup = st.slider(
-        "👪 Avg Occupancy", 
-        min_value=1.0, max_value=10.0, value=3.0, step=0.1,
-        help="Average number of household members"
-    )
-    latitude = st.slider(
-        "🌍 Latitude", 
-        min_value=32.5, max_value=42.0, value=34.0, step=0.01,
-        help="Latitude of block group"
-    )
-    longitude = st.slider(
-        "🌎 Longitude", 
-        min_value=-124.5, max_value=-114.0, value=-118.0, step=0.01,
-        help="Longitude of block group"
-    )
+    population = st.number_input("👥 Population", 0, 50000, 1000, 100)
+    aveoccup = st.slider("👪 Avg Occupancy", 1.0, 10.0, 3.0, 0.1)
+    latitude = st.slider("🌍 Latitude", 32.5, 42.0, 34.0, 0.01)
+    longitude = st.slider("🌎 Longitude", -124.5, -114.0, -118.0, 0.01)
 
-# Predict button
-if st.button("🔮 Predict House Price", type="primary"):
-    # Prepare input array
-    input_features = np.array([[medinc, houseage, averooms, avebedrms,
+# ---------------- PREDICTION ----------------
+if st.button("🔮 Predict House Price", use_container_width=True):
+
+    try:
+        input_data = np.array([[medinc, houseage, averooms, avebedrms,
                                 population, aveoccup, latitude, longitude]])
-    
-    # Predict (target is in $100,000 units)
-    prediction = model.predict(input_features)[0] * 100_000
-    
-    # Display result
-    st.success(f"### Estimated Price: **${prediction:,.2f}**")
-    
-    # Optional: Show input summary
-    with st.expander("📋 Your input summary"):
-        input_df = pd.DataFrame({
-            "Feature": ["MedInc", "HouseAge", "AveRooms", "AveBedrms", 
-                        "Population", "AveOccup", "Latitude", "Longitude"],
-            "Value": [medinc, houseage, averooms, avebedrms, 
-                      population, aveoccup, latitude, longitude]
-        })
-        st.dataframe(input_df, use_container_width=True)
+
+        prediction = model.predict(input_data)[0] * 100_000
+
+        # -------- DISPLAY RESULT --------
+        st.success("✅ Prediction Successful!")
+
+        st.metric(
+            label="💵 Estimated House Price",
+            value=f"${prediction:,.2f}"
+        )
+
+        # -------- INTERPRETATION --------
+        if prediction > 500000:
+            st.info("📈 High-value area (likely urban / coastal)")
+        elif prediction > 200000:
+            st.info("🏡 متوسط pricing area")
+        else:
+            st.info("📉 Affordable housing region")
+
+        # -------- INPUT SUMMARY --------
+        with st.expander("📋 Input Summary"):
+            df = pd.DataFrame({
+                "Feature": ["MedInc", "HouseAge", "AveRooms", "AveBedrms",
+                            "Population", "AveOccup", "Latitude", "Longitude"],
+                "Value": [medinc, houseage, averooms, avebedrms,
+                          population, aveoccup, latitude, longitude]
+            })
+            st.dataframe(df, use_container_width=True)
+
+    except Exception as e:
+        st.error(f"❌ Prediction failed: {e}")
+
+# ---------------- FOOTER ----------------
+st.markdown("---")
+st.caption("Built with ❤️ using Streamlit | ML Model: XGBoost")
