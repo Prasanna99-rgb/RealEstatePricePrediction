@@ -74,9 +74,9 @@ README.md          # Documentation
 ---
 
 ## 👨‍💻 Author
-
-**Prasanna Deshmane**
-Aspiring Data Scientist | Machine Learning Enthusiast
+Prasanna Deshmane
+GitHub: https://github.com/Prasanna99-rgb
+LinkedIn: https://www.linkedin.com/in/prasanna-deshmane-80a419205
 
 ---
 
